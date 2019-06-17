@@ -11,21 +11,69 @@ and open the template in the editor.
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>TODO supply a title</title>
+        <title>Prueba Mascota | páginas</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
-    <body>
+    <h:body>
         <p:growl id="msj" autoUpdate="true"/>
-        <h:form>
-            <p:outputLabel value="ID Mascota"/>
-            <p:inputText value="#{mascotaBean.mascota.idMascota}" required="true" />
-            <p:outputLabel value="Nombre Mascota"/>
-            <p:inputText value="#{mascotaBean.mascota.nombreMascota}" required="true"/>
-            <p:outputLabel value="Nombre del Dueño"/>
-            <p:inputText value="#{mascotaBean.mascota.nombreCliente}" required="true" />
-            <p:outputLabel value="Raza"/>
-            <p:inputText value="#{mascotaBean.mascota.raza}" required="true"/>
-            <p:commandButton value="Registrar" actionListener="#{mascotaBean.guardar()}"/>
-        </h:form>
-    </body>
+        <div align="center">
+
+            <!--funcion para guardar-->
+            <h:form id="formMascota">
+                <p:panel  style="width: 30%">
+                    <f:facet name="header">
+                        <column >
+                            <p:outputLabel value="MANTENIMIENTO MASCOTA"/>
+                        </column>
+                    </f:facet>
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ID Mascota"/>
+                        <p:inputText value="#{mascotaBean.mascota.idMascota}" required="true" />
+                        <p:outputLabel value="Nombre Mascota"/>
+                        <p:inputText value="#{mascotaBean.mascota.nombreMascota}" required="true"/>
+                        <p:outputLabel value="Nombre del Dueño"/>
+                        <p:inputText value="#{mascotaBean.mascota.nombreCliente}" required="true" />
+                        <p:outputLabel value="Raza"/>
+                        <p:inputText value="#{mascotaBean.mascota.raza}" required="true"/>
+                    </p:panelGrid>
+                    <p:commandButton value="Registrar" action="#{mascotaBean.guardar()}" update=":formData:DataTableMascota"/>
+                    <p:commandButton value="Actualizar" action="#{mascotaBean.actulizarMascota()}" update=":formData:DataTableMascota, :formMascota"/>
+                </p:panel>
+            </h:form>
+
+            <!--funcion para listar-->
+            <h:form id="formData">
+                <p:dataTable var="mascotaLista" rowKey="#{mascotaLista.idMascota}" 
+                             selection="#{mascotaBean.mascota}" selectionMode="single" 
+                             id="DataTableMascota" style="width: 60%" value="#{mascotaBean.listar()}"
+                             >
+                    <p:ajax event="rowSelect" update=":formMascota"/>   
+                    <p:column headerText="Item ">
+                        <p:outputLabel  value="#{mascotaLista.idMascota}"/>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <p:outputLabel  value="#{mascotaLista.nombreMascota}"/>
+                    </p:column>
+                    <p:column headerText="Cliente">
+                        <p:outputLabel  value="#{mascotaLista.nombreCliente}"/>
+                    </p:column>
+                    <p:column headerText="raza">
+                        <p:outputLabel  value="#{mascotaLista.raza}"/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="delete" action="#{mascotaBean.eliminarMascota()}" oncomplete="dlgeliminar.show();" update=":formData" >
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </h:form>        
+        </div> 
+        
+         <!-- <p:dialog id="dlg2" header="Eliminar Mascota" showEffect="explode" hideEffect="explode" widgetVar="dlgeliminar" modal="true" resizable="false" minWidth="200">
+                <h:form id="formEliminar">
+                    <h:outputText value="¿deseas eliminar?"/>
+                    <p:commandButton value="SI" action="#{mascotaBean.eliminarMascota()}" update=":formData" oncomplete="dlgeliminar.hide();"/>
+                    <p:commandButton value="NO" onclick="dlg2.hide();"/>
+                </h:form>
+            </p:dialog>-->
+    </h:body>
 </html>
