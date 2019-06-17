@@ -5,6 +5,7 @@
  */
 package utilitarios;
 
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
@@ -13,19 +14,21 @@ import org.hibernate.cfg.AnnotationConfiguration;
  * @author Juan Carlos
  */
 public class HibernateUtil {
- private static final SessionFactory sessionFactory;
- static {
+
+    private static final SessionFactory sessionFactory;
+
+    static {
         try {
-		sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            
+            sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+        } catch (HibernateException ex) {
+
             throw new ExceptionInInitializerError(ex);
         }
 
- }
- 
- public static SessionFactory getSessionFactory() {
+    }
+
+    public static SessionFactory getSessionFactory() {
         return sessionFactory;
- }
+    }
 
 }
